@@ -12,58 +12,138 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
+        /* Header Elegante */
         header {
             text-align: center;
             color: white;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 3.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            font-weight: 700;
+            letter-spacing: -1px;
         }
 
         .subtitle {
-            font-size: 1.1em;
-            opacity: 0.9;
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 30px;
         }
 
-        .content-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+        .school-info {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 0.95em;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 40px;
+            flex-wrap: wrap;
         }
 
+        .tab-btn {
+            padding: 14px 28px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Secciones */
         .section {
             background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
         .section h2 {
             color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 700;
         }
 
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
         }
 
         .form-group {
@@ -74,233 +154,542 @@
         label {
             color: #333;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #667eea;
         }
 
+        input[type="text"],
         input[type="password"],
-        input[type="file"],
+        input[type="email"],
+        select,
         textarea {
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 14px 16px;
+            border: 2px solid #e8e8f0;
+            border-radius: 10px;
             font-size: 1em;
             font-family: inherit;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            background: #f8f9fc;
         }
 
+        input[type="text"]:focus,
         input[type="password"]:focus,
-        input[type="file"]:focus,
+        input[type="email"]:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 100px;
         }
 
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            font-weight: 600;
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            display: block;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
             cursor: pointer;
+            text-align: center;
+            font-weight: 600;
             transition: all 0.3s;
         }
 
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 8px;
+            color: #667eea;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            width: 100%;
+            grid-column: 1 / -1;
         }
 
         .btn-primary:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
 
-        .btn-secondary {
-            background: #e74c3c;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #c0392b;
+        .btn-primary:active {
+            transform: translateY(-1px);
         }
 
         .message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 16px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: none;
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .message.success {
             background: #d4edda;
             color: #155724;
-            border: 1px solid #c3e6cb;
+            border-left-color: #28a745;
         }
 
         .message.error {
             background: #f8d7da;
             color: #721c24;
-            border: 1px solid #f5c6cb;
+            border-left-color: #dc3545;
         }
 
-        .hidden {
-            display: none;
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left-color: #17a2b8;
         }
 
+        /* Galería */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .photo-item {
             position: relative;
-            border-radius: 10px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            cursor: pointer;
+            background: white;
         }
 
         .photo-item:hover {
-            transform: scale(1.05);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .photo-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
         }
 
         .photo-item img {
             width: 100%;
-            height: 250px;
+            height: 100%;
             object-fit: cover;
             display: block;
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
         }
 
         .photo-info {
-            padding: 10px;
-            background: rgba(0,0,0,0.7);
+            width: 100%;
             color: white;
+        }
+
+        .photo-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .photo-description {
             font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .photo-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8em;
+            opacity: 0.8;
         }
 
         .empty-gallery {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: #999;
         }
 
-        @media (max-width: 768px) {
-            .content-wrapper {
+        .empty-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .empty-text {
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        .close {
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-body img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background: #f8f9fc;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            margin-top: 20px;
+        }
+
+        .info-box strong {
+            color: #667eea;
+        }
+
+        @media (max-width: 1024px) {
+            .form-grid {
                 grid-template-columns: 1fr;
             }
+        }
 
+        @media (max-width: 768px) {
             h1 {
-                font-size: 1.8em;
+                font-size: 2.2em;
+            }
+
+            .section {
+                padding: 25px;
             }
 
             .gallery {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .photo-wrapper {
+                height: 200px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header>
             <h1>📸 Galería de Fotos</h1>
             <p class="subtitle">Comparte los momentos especiales de nuestra escuela</p>
+            <div class="school-info">
+                ✨ Acceso público para toda la comunidad educativa
+            </div>
         </header>
 
-        <div class="content-wrapper">
-            <!-- Sección de Carga -->
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('upload')">📤 Subir Fotos</button>
+            <button class="tab-btn" onclick="switchTab('gallery')">🖼️ Ver Galería</button>
+            <button class="tab-btn" onclick="switchTab('info')">ℹ️ Información</button>
+        </div>
+
+        <!-- Tab: Subir Fotos -->
+        <div id="upload" class="tab-content active">
             <div class="section">
-                <h2>Subir Fotos</h2>
+                <h2>📤 Subir Fotos</h2>
                 <div id="uploadMessage" class="message"></div>
-                
-                <div class="login-form">
-                    <div class="form-group">
-                        <label for="password">Contraseña de Acceso:</label>
-                        <input type="password" id="password" placeholder="Ingresa la contraseña">
+
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="password">🔒 Contraseña de Acceso</label>
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña para subir fotos">
                     </div>
 
                     <div class="form-group">
-                        <label for="title">Título (opcional):</label>
-                        <input type="text" id="title" placeholder="Ej: Día de Deportes">
+                        <label for="profesorName">👨‍🏫 Nombre del Profesor/a</label>
+                        <input type="text" id="profesorName" placeholder="Tu nombre">
                     </div>
 
                     <div class="form-group">
-                        <label for="description">Descripción (opcional):</label>
-                        <textarea id="description" placeholder="Describe la foto..."></textarea>
+                        <label for="event">🎉 Evento o Actividad</label>
+                        <input type="text" id="event" placeholder="Ej: Día de Deportes, Acto de Graduación">
                     </div>
 
-                    <div class="form-group">
-                        <label for="photos">Selecciona Fotos:</label>
-                        <input type="file" id="photos" multiple accept="image/*">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="description">📝 Descripción de las Fotos</label>
+                        <textarea id="description" placeholder="Describe brevemente qué se ve en las fotos..."></textarea>
                     </div>
 
-                    <button class="btn-primary" onclick="uploadPhotos()">Subir Fotos</button>
-                </div>
-            </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>📁 Selecciona las Fotos</label>
+                        <div class="file-upload">
+                            <input type="file" id="photos" multiple accept="image/*">
+                            <label for="photos" class="file-label">
+                                🖼️ Haz clic para seleccionar fotos o arrastra aquí
+                            </label>
+                            <span class="file-name" id="fileName"></span>
+                        </div>
+                    </div>
 
-            <!-- Sección de Vista -->
-            <div class="section">
-                <h2>Información</h2>
-                <div style="color: #666; line-height: 1.8;">
-                    <p><strong>ℹ️ Instrucciones:</strong></p>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>Para subir fotos, ingresa la contraseña correcta</li>
-                        <li>Puedes seleccionar múltiples fotos a la vez</li>
-                        <li>Las fotos se guardan en el almacenamiento local del navegador</li>
-                        <li>Las fotos son visibles para todos sin necesidad de contraseña</li>
-                        <li>Para mejor experiencia, usa un navegador moderno</li>
-                    </ul>
-                    <p style="margin-top: 20px; font-size: 0.9em; color: #999;">
-                        <strong>Nota:</strong> Los datos se guardan en el dispositivo. Para compartir entre dispositivos, considera usar un servicio en la nube como GitHub Pages con backend o Firebase.
-                    </p>
+                    <button class="btn-primary" onclick="uploadPhotos()">✅ Subir Fotos a la Galería</button>
                 </div>
             </div>
         </div>
 
-        <!-- Galería -->
-        <div class="section">
-            <h2>📷 Galería</h2>
-            <div id="gallery" class="gallery">
-                <div class="empty-gallery">Aún no hay fotos subidas</div>
+        <!-- Tab: Galería -->
+        <div id="gallery" class="tab-content">
+            <div class="section">
+                <h2>🖼️ Galería de Fotos</h2>
+                <div id="galleryContainer" class="gallery">
+                    <div class="empty-gallery">
+                        <div class="empty-icon">📸</div>
+                        <div class="empty-text">Aún no hay fotos compartidas</div>
+                        <p style="margin-top: 10px; color: #ccc;">Las fotos aparecerán aquí cuando se suban</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Información -->
+        <div id="info" class="tab-content">
+            <div class="section">
+                <h2>ℹ️ Información sobre la Galería</h2>
+                
+                <div class="info-box">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🔐 Seguridad</h3>
+                    <p style="margin-bottom: 10px;"><strong>Contraseña:</strong> Solo los profesores con la contraseña correcta pueden subir fotos.</p>
+                    <p><strong>Visualización:</strong> Las fotos están disponibles públicamente para que cualquiera pueda verlas.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📤 Cómo Subir Fotos</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Ve a la pestaña "Subir Fotos"</li>
+                        <li>Ingresa la contraseña de acceso</li>
+                        <li>Completa tus datos (nombre, evento, descripción)</li>
+                        <li>Selecciona una o más fotos de tu computadora</li>
+                        <li>Haz clic en "Subir Fotos a la Galería"</li>
+                    </ol>
+                </div>
+
+                <div class="info-box">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🔗 Compartir el Enlace</h3>
+                    <p>El enlace de esta galería puede compartirse con:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Estudiantes</li>
+                        <li>Padres y apoderados</li>
+                        <li>Otros profesores</li>
+                        <li>Toda la comunidad educativa</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">💾 Almacenamiento</h3>
+                    <p>Las fotos se guardan localmente en este navegador. Para tener acceso permanente desde otros dispositivos o navegadores, se recomienda usar un servicio de almacenamiento en la nube adicional.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver foto completa -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" src="" alt="Foto">
+                <p id="modalDescription"></p>
+                <div style="display: flex; justify-content: space-between; color: #999; font-size: 0.9em;">
+                    <span id="modalProfesor"></span>
+                    <span id="modalDate"></span>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const CORRECT_PASSWORD = "escuela2024"; // Cambia esta contraseña
-        const STORAGE_KEY = "school_photos";
+        const CORRECT_PASSWORD = "escuela2024";
+        const STORAGE_KEY = "school_photos_v2";
 
         // Cargar fotos al iniciar
         loadPhotos();
 
+        // Drag and drop
+        const fileInput = document.getElementById("photos");
+        const fileLabel = document.querySelector(".file-label");
+
+        fileLabel.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            fileLabel.style.background = "linear-gradient(135deg, #5568d3 0%, #6b3ba0 100%)";
+        });
+
+        fileLabel.addEventListener("dragleave", () => {
+            fileLabel.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+        });
+
+        fileLabel.addEventListener("drop", (e) => {
+            e.preventDefault();
+            fileLabel.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+            fileInput.files = e.dataTransfer.files;
+            updateFileName();
+        });
+
+        fileInput.addEventListener("change", updateFileName);
+
+        function updateFileName() {
+            const fileNameSpan = document.getElementById("fileName");
+            if (fileInput.files.length > 0) {
+                fileNameSpan.textContent = `✅ ${fileInput.files.length} foto(s) seleccionada(s)`;
+            } else {
+                fileNameSpan.textContent = "";
+            }
+        }
+
         function uploadPhotos() {
             const password = document.getElementById("password").value;
-            const fileInput = document.getElementById("photos");
             const files = fileInput.files;
-            const title = document.getElementById("title").value;
+            const profesorName = document.getElementById("profesorName").value;
+            const event = document.getElementById("event").value;
             const description = document.getElementById("description").value;
-            const messageDiv = document.getElementById("uploadMessage");
 
-            // Validar contraseña
             if (password !== CORRECT_PASSWORD) {
                 showMessage("❌ Contraseña incorrecta", "error");
                 return;
             }
 
-            // Validar que haya archivos
+            if (!profesorName.trim()) {
+                showMessage("⚠️ Por favor ingresa tu nombre", "error");
+                return;
+            }
+
+            if (!event.trim()) {
+                showMessage("⚠️ Por favor ingresa el evento o actividad", "error");
+                return;
+            }
+
             if (files.length === 0) {
                 showMessage("⚠️ Selecciona al menos una foto", "error");
                 return;
             }
 
-            // Procesar archivos
             let processedCount = 0;
             Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
@@ -308,23 +697,25 @@
                     const photoData = {
                         id: Date.now() + index,
                         image: e.target.result,
-                        title: title || `Foto ${index + 1}`,
-                        description: description || "",
+                        event: event,
+                        description: description || "Sin descripción",
+                        profesor: profesorName,
                         date: new Date().toLocaleDateString('es-ES')
                     };
 
-                    // Guardar en almacenamiento local
                     let photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-                    photos.push(photoData);
+                    photos.unshift(photoData);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
 
                     processedCount++;
                     if (processedCount === files.length) {
-                        showMessage(`✅ ${files.length} foto(s) subida(s) exitosamente`, "success");
+                        showMessage(`✅ ¡Excelente! ${files.length} foto(s) subida(s) exitosamente`, "success");
                         fileInput.value = "";
-                        document.getElementById("title").value = "";
+                        document.getElementById("profesorName").value = "";
+                        document.getElementById("event").value = "";
                         document.getElementById("description").value = "";
                         document.getElementById("password").value = "";
+                        updateFileName();
                         loadPhotos();
                     }
                 };
@@ -334,20 +725,33 @@
 
         function loadPhotos() {
             const photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-            const gallery = document.getElementById("gallery");
+            const gallery = document.getElementById("galleryContainer");
 
             if (photos.length === 0) {
-                gallery.innerHTML = '<div class="empty-gallery">Aún no hay fotos subidas</div>';
+                gallery.innerHTML = `
+                    <div class="empty-gallery">
+                        <div class="empty-icon">📸</div>
+                        <div class="empty-text">Aún no hay fotos compartidas</div>
+                        <p style="margin-top: 10px; color: #ccc;">Las fotos aparecerán aquí cuando se suban</p>
+                    </div>
+                `;
                 return;
             }
 
             gallery.innerHTML = photos.map(photo => `
-                <div class="photo-item">
-                    <img src="${photo.image}" alt="${photo.title}">
-                    <div class="photo-info">
-                        <strong>${photo.title}</strong>
-                        <p>${photo.description}</p>
-                        <small>${photo.date}</small>
+                <div class="photo-item" onclick="openModal('${photo.id}')">
+                    <div class="photo-wrapper">
+                        <img src="${photo.image}" alt="${photo.event}">
+                        <div class="photo-overlay">
+                            <div class="photo-info">
+                                <div class="photo-title">${photo.event}</div>
+                                <div class="photo-description">${photo.description}</div>
+                                <div class="photo-meta">
+                                    <span>👨‍🏫 ${photo.profesor}</span>
+                                    <span>📅 ${photo.date}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `).join("");
@@ -362,6 +766,43 @@
             setTimeout(() => {
                 messageDiv.style.display = "none";
             }, 5000);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach(tab => {
+                tab.classList.remove("active");
+            });
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            document.getElementById(tabName).classList.add("active");
+            event.target.classList.add("active");
+        }
+
+        function openModal(photoId) {
+            const photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            const photo = photos.find(p => p.id == photoId);
+
+            if (photo) {
+                document.getElementById("modalTitle").textContent = photo.event;
+                document.getElementById("modalImage").src = photo.image;
+                document.getElementById("modalDescription").textContent = photo.description;
+                document.getElementById("modalProfesor").textContent = `👨‍🏫 ${photo.profesor}`;
+                document.getElementById("modalDate").textContent = `📅 ${photo.date}`;
+                document.getElementById("photoModal").style.display = "block";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("photoModal").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("photoModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     </script>
 </body>
