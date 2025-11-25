@@ -874,3 +874,176 @@
                     const isVideo = file.type.startsWith("video");
                     const mediaData = {
                         id: Date.now() + index,
+                        media: e.target.result,
+                        isVideo: isVideo,
+                        event: event,
+                        description: description || "Sin descripción",
+                        profesor: profesorName,
+                        date: new Date().toLocaleDateString('es-ES')
+                    };
+
+                    let allMedia = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+                    allMedia.unshift(mediaData);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(allMedia));
+
+                    processedCount++;
+                    if (processedCount === files.length) {
+                        showMessage(`✅ ¡Excelente! ${files.length} archivo(s) subido(s). Descarga datos.json y súbelo a GitHub.`, "success", "uploadMessage");
+                        fileInput.value = "";
+                        document.getElementById("profesorName").value = "";
+                        document.getElementById("event").value = "";
+                        document.getElementById("description").value = "";
+                        document.getElementById("password").value = "";
+                        updateFileName();
+                        loadMedia();
+                        downloadJSON();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function loadMedia() {
+            const allMedia = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            const gallery = document.getElementById("galleryContainer");
+
+            if (allMedia.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-gallery">
+                        <div class="empty-icon">📸</div>
+                        <div class="empty-text">Aún no hay contenido compartido</div>
+                        <p style="margin-top: 10px; color: #ccc;">El contenido aparecerá aquí cuando se suba</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gallery.innerHTML = allMedia.map(item => {
+                const badge = item.isVideo ? "🎥 VIDEO" : "📷 FOTO";
+                const mediaContent = item.isVideo 
+                    ? `<video class="media-item-video" style="width:100%; height:100%; object-fit: cover;"><source src="${item.media}" type="video/mp4"></video><div class="play-icon">▶️</div>`
+                    : `<img src="${item.media}" alt="${item.event}">`;
+                
+                return `
+                    <div class="media-item" onclick="openModal('${item.id}')">
+                        <div class="media-wrapper">
+                            ${mediaContent}
+                            <div class="media-badge">${badge}</div>
+                            <div class="media-overlay">
+                                <div class="media-info">
+                                    <div class="media-title">${item.event}</div>
+                                    <div class="media-description">${item.description}</div>
+                                    <div class="media-meta">
+                                        <span>👨‍🏫 ${item.profesor}</span>
+                                        <span>📅 ${item.date}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function openModal(mediaId) {
+            const allMedia = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            const item = allMedia.find(m => m.id == mediaId);
+
+            if (item) {
+                document.getElementById("modalTitle").textContent = item.event;
+                document.getElementById("modalDescription").textContent = item.description;
+                document.getElementById("modalProfesor").textContent = `👨‍🏫 ${item.profesor}`;
+                document.getElementById("modalDate").textContent = `📅 ${item.date}`;
+
+                if (item.isVideo) {
+                    document.getElementById("modalImage").style.display = "none";
+                    document.getElementById("modalVideo").style.display = "block";
+                    document.getElementById("modalVideo").innerHTML = `<source src="${item.media}" type="video/mp4">`;
+                } else {
+                    document.getElementById("modalVideo").style.display = "none";
+                    document.getElementById("modalImage").style.display = "block";
+                    document.getElementById("modalImage").src = item.media;
+                }
+                document.getElementById("mediaModal").style.display = "block";
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("mediaModal").style.display = "none";
+            document.getElementById("modalVideo").innerHTML = "";
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById("mediaModal");
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.getElementById("modalVideo").innerHTML = "";
+            }
+        }
+
+        function showMessage(text, type, elementId) {
+            const messageDiv = document.getElementById(elementId || "uploadMessage");
+            messageDiv.textContent = text;
+            messageDiv.className = `message ${type}`;
+            messageDiv.style.display = "block";
+
+            setTimeout(() => {
+                messageDiv.style.display = "none";
+            }, 5000);
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach(tab => {
+                tab.classList.remove("active");
+            });
+            document.querySelectorAll(".tab-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            document.getElementById(tabName).classList.add("active");
+            event.target.classList.add("active");
+        }
+
+        function downloadJSON() {
+            const allMedia = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            const dataStr = JSON.stringify(allMedia, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'datos.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showMessage("✅ Archivo descargado. Ahora súbelo a GitHub.", "success", "uploadMessage");
+        }
+
+        function loadJSON() {
+            const password = document.getElementById("password2").value;
+            const jsonFile = document.getElementById("jsonFile");
+
+            if (password !== CORRECT_PASSWORD) {
+                showMessage("❌ Contraseña incorrecta", "error", "manageMessage");
+                return;
+            }
+
+            if (!jsonFile.files.length) {
+                showMessage("⚠️ Selecciona un archivo JSON", "error", "manageMessage");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                    showMessage("✅ Datos cargados correctamente", "success", "manageMessage");
+                    loadMedia();
+                } catch (err) {
+                    showMessage("❌ Archivo JSON inválido", "error", "manageMessage");
+                }
+            };
+            reader.readAsText(jsonFile.files[0]);
+        }
+    </script>
+</body>
+</html>
