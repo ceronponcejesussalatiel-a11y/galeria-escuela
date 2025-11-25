@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería de Fotos - Escuela</title>
+    <title>Galería de Fotos y Videos - Escuela</title>
     <style>
         * {
             margin: 0;
@@ -254,6 +254,19 @@
             transform: translateY(-1px);
         }
 
+        .btn-secondary {
+            background: #17a2b8;
+            color: white;
+            width: 100%;
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #138496;
+            transform: translateY(-3px);
+        }
+
         .message {
             padding: 16px 20px;
             border-radius: 10px;
@@ -300,7 +313,7 @@
             animation: fadeIn 0.5s ease-out;
         }
 
-        .photo-item {
+        .media-item {
             position: relative;
             border-radius: 15px;
             overflow: hidden;
@@ -310,18 +323,20 @@
             background: white;
         }
 
-        .photo-item:hover {
+        .media-item:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.25);
         }
 
-        .photo-wrapper {
+        .media-wrapper {
             position: relative;
             overflow: hidden;
             height: 280px;
+            background: #f0f0f0;
         }
 
-        .photo-item img {
+        .media-item img,
+        .media-item video {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -329,11 +344,39 @@
             transition: transform 0.3s;
         }
 
-        .photo-item:hover img {
+        .media-item:hover img,
+        .media-item:hover video {
             transform: scale(1.08);
         }
 
-        .photo-overlay {
+        .media-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            opacity: 0.8;
+            transition: all 0.3s;
+        }
+
+        .media-item:hover .play-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .media-overlay {
             position: absolute;
             top: 0;
             left: 0;
@@ -347,29 +390,29 @@
             padding: 20px;
         }
 
-        .photo-item:hover .photo-overlay {
+        .media-item:hover .media-overlay {
             opacity: 1;
         }
 
-        .photo-info {
+        .media-info {
             width: 100%;
             color: white;
         }
 
-        .photo-title {
+        .media-title {
             font-size: 1.2em;
             font-weight: 700;
             margin-bottom: 8px;
         }
 
-        .photo-description {
+        .media-description {
             font-size: 0.9em;
             opacity: 0.9;
             margin-bottom: 8px;
             line-height: 1.4;
         }
 
-        .photo-meta {
+        .media-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -403,8 +446,9 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.9);
             animation: fadeIn 0.3s ease-out;
+            overflow-y: auto;
         }
 
         .modal-content {
@@ -448,10 +492,15 @@
             padding: 30px;
         }
 
-        .modal-body img {
+        .modal-body img,
+        .modal-body video {
             width: 100%;
             border-radius: 10px;
             margin-bottom: 20px;
+        }
+
+        .modal-body video {
+            max-height: 600px;
         }
 
         .info-box {
@@ -464,6 +513,33 @@
 
         .info-box strong {
             color: #667eea;
+        }
+
+        .camera-section {
+            background: #f8f9fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #667eea;
+        }
+
+        .camera-preview {
+            width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+            max-height: 400px;
+        }
+
+        .camera-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-sm {
+            padding: 10px 15px;
+            font-size: 0.9em;
+            flex: 1;
         }
 
         @media (max-width: 1024px) {
@@ -485,7 +561,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             }
 
-            .photo-wrapper {
+            .media-wrapper {
                 height: 200px;
             }
         }
@@ -495,30 +571,43 @@
     <div class="container">
         <!-- Header -->
         <header>
-            <h1>📸 Galería de Fotos</h1>
+            <h1>📸 Galería de Fotos y Videos</h1>
             <p class="subtitle">Comparte los momentos especiales de nuestra escuela</p>
             <div class="school-info">
-                ✨ Acceso público para toda la comunidad educativa
+                ✨ Fotos, Videos y Capturas para toda la comunidad educativa
             </div>
         </header>
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('upload')">📤 Subir Fotos</button>
+            <button class="tab-btn active" onclick="switchTab('upload')">📤 Subir Contenido</button>
             <button class="tab-btn" onclick="switchTab('gallery')">🖼️ Ver Galería</button>
+            <button class="tab-btn" onclick="switchTab('manage')">📁 Cargar Archivos</button>
             <button class="tab-btn" onclick="switchTab('info')">ℹ️ Información</button>
         </div>
 
-        <!-- Tab: Subir Fotos -->
+        <!-- Tab: Subir Contenido -->
         <div id="upload" class="tab-content active">
             <div class="section">
-                <h2>📤 Subir Fotos</h2>
+                <h2>📤 Subir Fotos y Videos</h2>
                 <div id="uploadMessage" class="message"></div>
+
+                <!-- Cámara Web -->
+                <div class="camera-section">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📷 Captura desde tu Cámara</h3>
+                    <video id="cameraPreview" class="camera-preview" style="display:none;"></video>
+                    <canvas id="captureCanvas" style="display:none;"></canvas>
+                    <div class="camera-buttons">
+                        <button class="btn-primary btn-sm" onclick="startCamera()" id="startCameraBtn">Iniciar Cámara</button>
+                        <button class="btn-primary btn-sm" onclick="capturePhoto()" id="captureBtn" style="display:none;">📸 Capturar</button>
+                        <button class="btn-secondary btn-sm" onclick="stopCamera()" id="stopCameraBtn" style="display:none;">Detener</button>
+                    </div>
+                </div>
 
                 <div class="form-grid">
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label for="password">🔒 Contraseña de Acceso</label>
-                        <input type="password" id="password" placeholder="Ingresa tu contraseña para subir fotos">
+                        <input type="password" id="password" placeholder="Ingresa tu contraseña para subir contenido">
                     </div>
 
                     <div class="form-group">
@@ -532,22 +621,22 @@
                     </div>
 
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <label for="description">📝 Descripción de las Fotos</label>
-                        <textarea id="description" placeholder="Describe brevemente qué se ve en las fotos..."></textarea>
+                        <label for="description">📝 Descripción del Contenido</label>
+                        <textarea id="description" placeholder="Describe brevemente qué se ve en las fotos o videos..."></textarea>
                     </div>
 
                     <div class="form-group" style="grid-column: 1 / -1;">
-                        <label>📁 Selecciona las Fotos</label>
+                        <label>📁 Selecciona Fotos, Videos o Capturas</label>
                         <div class="file-upload">
-                            <input type="file" id="photos" multiple accept="image/*">
-                            <label for="photos" class="file-label">
-                                🖼️ Haz clic para seleccionar fotos o arrastra aquí
+                            <input type="file" id="media" multiple accept="image/*,video/*">
+                            <label for="media" class="file-label">
+                                🖼️ Haz clic para seleccionar o arrastra aquí
                             </label>
                             <span class="file-name" id="fileName"></span>
                         </div>
                     </div>
 
-                    <button class="btn-primary" onclick="uploadPhotos()">✅ Subir Fotos a la Galería</button>
+                    <button class="btn-primary" onclick="uploadMedia()">✅ Subir Contenido a la Galería</button>
                 </div>
             </div>
         </div>
@@ -555,13 +644,53 @@
         <!-- Tab: Galería -->
         <div id="gallery" class="tab-content">
             <div class="section">
-                <h2>🖼️ Galería de Fotos</h2>
+                <h2>🖼️ Galería de Fotos y Videos</h2>
                 <div id="galleryContainer" class="gallery">
                     <div class="empty-gallery">
                         <div class="empty-icon">📸</div>
-                        <div class="empty-text">Aún no hay fotos compartidas</div>
-                        <p style="margin-top: 10px; color: #ccc;">Las fotos aparecerán aquí cuando se suban</p>
+                        <div class="empty-text">Aún no hay contenido compartido</div>
+                        <p style="margin-top: 10px; color: #ccc;">El contenido aparecerá aquí cuando se suba</p>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Cargar Archivos -->
+        <div id="manage" class="tab-content">
+            <div class="section">
+                <h2>📁 Cargar Archivo de Datos</h2>
+                <div id="manageMessage" class="message"></div>
+                
+                <div class="form-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label for="password2">🔒 Contraseña de Acceso</label>
+                        <input type="password" id="password2" placeholder="Ingresa tu contraseña">
+                    </div>
+
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>📄 Cargar archivo datos.json</label>
+                        <div class="file-upload">
+                            <input type="file" id="jsonFile" accept=".json">
+                            <label for="jsonFile" class="file-label">
+                                📤 Selecciona el archivo datos.json
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" onclick="loadJSON()">⬆️ Cargar Datos</button>
+                    <button class="btn-secondary" onclick="downloadJSON()">⬇️ Descargar datos.json (Para GitHub)</button>
+                </div>
+
+                <div class="info-box" style="margin-top: 30px;">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📋 Instrucciones para GitHub:</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Haz clic en "Descargar datos.json"</li>
+                        <li>Ve a tu repositorio en GitHub</li>
+                        <li>Haz clic en "Add file" → "Upload files"</li>
+                        <li>Sube el archivo datos.json</li>
+                        <li>Escribe un comentario y haz "Commit"</li>
+                        <li>¡Listo! Todos verán el contenido</li>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -572,19 +701,26 @@
                 <h2>ℹ️ Información sobre la Galería</h2>
                 
                 <div class="info-box">
-                    <h3 style="color: #667eea; margin-bottom: 15px;">🔐 Seguridad</h3>
-                    <p style="margin-bottom: 10px;"><strong>Contraseña:</strong> Solo los profesores con la contraseña correcta pueden subir fotos.</p>
-                    <p><strong>Visualización:</strong> Las fotos están disponibles públicamente para que cualquiera pueda verlas.</p>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📦 Tipos de Contenido Soportados</h3>
+                    <p style="margin-bottom: 10px;"><strong>Fotos:</strong> JPG, PNG, WEBP</p>
+                    <p style="margin-bottom: 10px;"><strong>Videos:</strong> MP4, WebM, Ogg</p>
+                    <p><strong>Capturas:</strong> Fotos tomadas con la cámara web</p>
                 </div>
 
                 <div class="info-box">
-                    <h3 style="color: #667eea; margin-bottom: 15px;">📤 Cómo Subir Fotos</h3>
+                    <h3 style="color: #667eea; margin-bottom: 15px;">🔐 Seguridad</h3>
+                    <p style="margin-bottom: 10px;"><strong>Contraseña:</strong> Solo los profesores con la contraseña correcta pueden subir contenido.</p>
+                    <p><strong>Visualización:</strong> El contenido está disponible públicamente para que cualquiera pueda verlo.</p>
+                </div>
+
+                <div class="info-box">
+                    <h3 style="color: #667eea; margin-bottom: 15px;">📤 Cómo Subir Contenido</h3>
                     <ol style="margin-left: 20px;">
-                        <li>Ve a la pestaña "Subir Fotos"</li>
+                        <li>Ve a la pestaña "Subir Contenido"</li>
                         <li>Ingresa la contraseña de acceso</li>
                         <li>Completa tus datos (nombre, evento, descripción)</li>
-                        <li>Selecciona una o más fotos de tu computadora</li>
-                        <li>Haz clic en "Subir Fotos a la Galería"</li>
+                        <li>Selecciona fotos, videos o captura con tu cámara</li>
+                        <li>Haz clic en "Subir Contenido a la Galería"</li>
                     </ol>
                 </div>
 
@@ -598,24 +734,20 @@
                         <li>Toda la comunidad educativa</li>
                     </ul>
                 </div>
-
-                <div class="info-box">
-                    <h3 style="color: #667eea; margin-bottom: 15px;">💾 Almacenamiento</h3>
-                    <p>Las fotos se guardan localmente en este navegador. Para tener acceso permanente desde otros dispositivos o navegadores, se recomienda usar un servicio de almacenamiento en la nube adicional.</p>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para ver foto completa -->
-    <div id="photoModal" class="modal">
+    <!-- Modal para ver contenido -->
+    <div id="mediaModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle"></h2>
                 <span class="close" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body">
-                <img id="modalImage" src="" alt="Foto">
+                <img id="modalImage" src="" alt="Contenido" style="display:none;">
+                <video id="modalVideo" controls style="display:none;"></video>
                 <p id="modalDescription"></p>
                 <div style="display: flex; justify-content: space-between; color: #999; font-size: 0.9em;">
                     <span id="modalProfesor"></span>
@@ -627,13 +759,14 @@
 
     <script>
         const CORRECT_PASSWORD = "escuela2024";
-        const STORAGE_KEY = "school_photos_v2";
+        const STORAGE_KEY = "school_media_v3";
+        let cameraStream = null;
 
-        // Cargar fotos al iniciar
-        loadPhotos();
+        // Cargar contenido al iniciar
+        loadMedia();
 
         // Drag and drop
-        const fileInput = document.getElementById("photos");
+        const fileInput = document.getElementById("media");
         const fileLabel = document.querySelector(".file-label");
 
         fileLabel.addEventListener("dragover", (e) => {
@@ -657,13 +790,57 @@
         function updateFileName() {
             const fileNameSpan = document.getElementById("fileName");
             if (fileInput.files.length > 0) {
-                fileNameSpan.textContent = `✅ ${fileInput.files.length} foto(s) seleccionada(s)`;
+                fileNameSpan.textContent = `✅ ${fileInput.files.length} archivo(s) seleccionado(s)`;
             } else {
                 fileNameSpan.textContent = "";
             }
         }
 
-        function uploadPhotos() {
+        // Cámara
+        async function startCamera() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById("cameraPreview");
+                video.srcObject = cameraStream;
+                video.style.display = "block";
+                document.getElementById("startCameraBtn").style.display = "none";
+                document.getElementById("captureBtn").style.display = "inline-block";
+                document.getElementById("stopCameraBtn").style.display = "inline-block";
+            } catch (err) {
+                showMessage("❌ No se pudo acceder a la cámara", "error", "uploadMessage");
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+            document.getElementById("cameraPreview").style.display = "none";
+            document.getElementById("startCameraBtn").style.display = "inline-block";
+            document.getElementById("captureBtn").style.display = "none";
+            document.getElementById("stopCameraBtn").style.display = "none";
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById("cameraPreview");
+            const canvas = document.getElementById("captureCanvas");
+            const ctx = canvas.getContext("2d");
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            
+            canvas.toBlob((blob) => {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(new File([blob], `captura_${Date.now()}.jpg`, { type: "image/jpeg" }));
+                fileInput.files = dataTransfer.items;
+                updateFileName();
+                stopCamera();
+                showMessage("✅ Foto capturada. Ahora sube el contenido.", "success", "uploadMessage");
+            });
+        }
+
+        function uploadMedia() {
             const password = document.getElementById("password").value;
             const files = fileInput.files;
             const profesorName = document.getElementById("profesorName").value;
@@ -671,22 +848,22 @@
             const description = document.getElementById("description").value;
 
             if (password !== CORRECT_PASSWORD) {
-                showMessage("❌ Contraseña incorrecta", "error");
+                showMessage("❌ Contraseña incorrecta", "error", "uploadMessage");
                 return;
             }
 
             if (!profesorName.trim()) {
-                showMessage("⚠️ Por favor ingresa tu nombre", "error");
+                showMessage("⚠️ Por favor ingresa tu nombre", "error", "uploadMessage");
                 return;
             }
 
             if (!event.trim()) {
-                showMessage("⚠️ Por favor ingresa el evento o actividad", "error");
+                showMessage("⚠️ Por favor ingresa el evento o actividad", "error", "uploadMessage");
                 return;
             }
 
             if (files.length === 0) {
-                showMessage("⚠️ Selecciona al menos una foto", "error");
+                showMessage("⚠️ Selecciona al menos un archivo", "error", "uploadMessage");
                 return;
             }
 
@@ -694,116 +871,6 @@
             Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const photoData = {
+                    const isVideo = file.type.startsWith("video");
+                    const mediaData = {
                         id: Date.now() + index,
-                        image: e.target.result,
-                        event: event,
-                        description: description || "Sin descripción",
-                        profesor: profesorName,
-                        date: new Date().toLocaleDateString('es-ES')
-                    };
-
-                    let photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-                    photos.unshift(photoData);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(photos));
-
-                    processedCount++;
-                    if (processedCount === files.length) {
-                        showMessage(`✅ ¡Excelente! ${files.length} foto(s) subida(s) exitosamente`, "success");
-                        fileInput.value = "";
-                        document.getElementById("profesorName").value = "";
-                        document.getElementById("event").value = "";
-                        document.getElementById("description").value = "";
-                        document.getElementById("password").value = "";
-                        updateFileName();
-                        loadPhotos();
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function loadPhotos() {
-            const photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-            const gallery = document.getElementById("galleryContainer");
-
-            if (photos.length === 0) {
-                gallery.innerHTML = `
-                    <div class="empty-gallery">
-                        <div class="empty-icon">📸</div>
-                        <div class="empty-text">Aún no hay fotos compartidas</div>
-                        <p style="margin-top: 10px; color: #ccc;">Las fotos aparecerán aquí cuando se suban</p>
-                    </div>
-                `;
-                return;
-            }
-
-            gallery.innerHTML = photos.map(photo => `
-                <div class="photo-item" onclick="openModal('${photo.id}')">
-                    <div class="photo-wrapper">
-                        <img src="${photo.image}" alt="${photo.event}">
-                        <div class="photo-overlay">
-                            <div class="photo-info">
-                                <div class="photo-title">${photo.event}</div>
-                                <div class="photo-description">${photo.description}</div>
-                                <div class="photo-meta">
-                                    <span>👨‍🏫 ${photo.profesor}</span>
-                                    <span>📅 ${photo.date}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join("");
-        }
-
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById("uploadMessage");
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = "block";
-
-            setTimeout(() => {
-                messageDiv.style.display = "none";
-            }, 5000);
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll(".tab-content").forEach(tab => {
-                tab.classList.remove("active");
-            });
-            document.querySelectorAll(".tab-btn").forEach(btn => {
-                btn.classList.remove("active");
-            });
-
-            document.getElementById(tabName).classList.add("active");
-            event.target.classList.add("active");
-        }
-
-        function openModal(photoId) {
-            const photos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-            const photo = photos.find(p => p.id == photoId);
-
-            if (photo) {
-                document.getElementById("modalTitle").textContent = photo.event;
-                document.getElementById("modalImage").src = photo.image;
-                document.getElementById("modalDescription").textContent = photo.description;
-                document.getElementById("modalProfesor").textContent = `👨‍🏫 ${photo.profesor}`;
-                document.getElementById("modalDate").textContent = `📅 ${photo.date}`;
-                document.getElementById("photoModal").style.display = "block";
-            }
-        }
-
-        function closeModal() {
-            document.getElementById("photoModal").style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById("photoModal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-</body>
-</html>
